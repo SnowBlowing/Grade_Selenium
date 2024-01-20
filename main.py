@@ -7,13 +7,11 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.edge.service import Service
-from selenium.webdriver.edge.options import Options
-from selenium.webdriver import Edge
-from selenium.webdriver import EdgeOptions
 from selenium.webdriver.support.ui import Select
 import time
 import pymysql
 import Student
+import SaveInfo
 
 
 # 爬取信息
@@ -33,7 +31,7 @@ def get_info_web(garde_id, ID, name):
     # browser = webdriver.Edge(options=option, service=service)
     # browser.get('http://218.26.234.85/views/search.html')
 
-    service = Service('E:/Compiler/browser/edge/MicrosoftWebDriver.exe')
+    service = Service('E:\\Environment\\Browser\\Edge\\MicrosoftWebDriver.exe')
     browser = webdriver.Edge(service=service)
     browser.get('http://218.26.234.85/views/search.html')
     time.sleep(1)
@@ -72,24 +70,13 @@ def get_info_web(garde_id, ID, name):
     time.sleep(1)
     return stu
 
-
-# 连接数据库
-def connect_mysql():
-    db_host = 'localhost'
-    db_user = 'root'
-    db_psw = '141421'
-    db_name = 'grade_selenium'
-    try:
-        conn = pymysql.connect(host=db_host, user=db_user, password=db_psw, database=db_name)
-        print("数据库连接成功")
-    except pymysql.Error as e:
-        print("数据库连接失败" + str(e))
-
+def fun():
+    # 链接数据库
+    connection = SaveInfo.Connection
     # 处理数据
-    deal_data(conn)
-
+    deal_data(connection.conn)
     # 关闭数据库
-    conn.close()
+    connection.close_mysql()
 
 
 # 处理数据
