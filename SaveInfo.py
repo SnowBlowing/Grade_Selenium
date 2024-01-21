@@ -30,3 +30,5 @@ class Connection:
 
     def close_mysql(self):
         self.conn.close()
+
+

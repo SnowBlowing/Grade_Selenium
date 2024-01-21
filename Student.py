@@ -4,9 +4,15 @@
 # @Software: PyCharm
 # @Describe:
 class Student:
-    def __init__(self, chinese='', math='', english='', physics='', chemistry='', political='', history='', geography='',
-                 biology='', level_pol='', level_his='', level_physics='', level_chem='', level_geo='', level_bio='', physical='', comprehensive='',
-                 experiment='', music_art='', total=''):
+    def __init__(self, name='', exam_id='', idcard='', chinese='', math='', english='', physics='', chemistry='',
+                 political='', history='', geography='', biology='', level_pol='', level_his='', level_physics='',
+                 level_chem='', level_geo='', level_bio='', physical='', comprehensive='', experiment='', music_art='',
+                 total=''):
+        # 基本信息
+        self.name = name
+        self.exam_id = exam_id
+        self.idcard = idcard
+
         # 成绩信息
         self.chinese = chinese
         self.math = math
@@ -29,4 +35,3 @@ class Student:
         # self.computer = computer
         self.music_art = music_art
         self.total = total
-

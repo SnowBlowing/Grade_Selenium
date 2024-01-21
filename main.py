@@ -8,9 +8,10 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 import time
-import Student
-import SaveInfo
 import configparser
+
+import Student
+import SQLite_Tool
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -74,77 +75,78 @@ def get_info_web(garde_id, ID, name):
 
 
 # 处理数据
-def deal_data(conn):
-    # 创建游标对象
-    cursor = conn.cursor()
-    get_stu(cursor, conn)
-    cursor.close()
+def deal_data():
+    get_stu(sql.cursor, sql.conn)
+    sql.cursor.close()
 
 
 # 获取基本信息
 def get_stu(cursor, conn):
-    # 获取student表中的信息
-    query = "SELECT * FROM grade"
-    cursor.execute(query)
-
-    # 获取查询结果
-    results = cursor.fetchall()
+    sql.select_grade()
+    results = sql.results
 
     # 处理信息并更新到student表中
     i = 1
     for row in results:
-        # 获取原始数据
-        name = row[2]
-        grade_id = row[3]
-        ID = row[4]
+        # 获取基本数据
+        name = row[0]
+        exam_id = row[1]
+        idcard = row[2]
+
         i += 1
+
         # 获取爬虫信息
-        stu = get_info_web(grade_id, ID, name)
+        stu = get_info_web(exam_id, idcard, name)
+        # 添加信息到数据库
+        sql.insert_grade(stu)
+        # 提交事务
+        sql.commit()
 
-        # 获取信息
-        chinese = stu.chinese
-        math = stu.math
-        english = stu.english
-        physics = stu.physics
-        chemistry = stu.chemistry
-        political = stu.political
-        history = stu.history
-        geography = stu.geography
-        biology = stu.biology
-        level_pol = stu.level_pol
-        level_his = stu.level_his
-        level_physics = stu.level_physics
-        level_chem = stu.level_chem
-        level_geo = stu.level_geo
-        level_bio = stu.level_bio
-        physical = stu.physical
-        comprehensive = stu.comprehensive
-        experiment = stu.experiment
-        music_art = stu.music_art
-        total = stu.total
-
-        # 测试
-        print(i, chinese, math, english, physics, chemistry, political, history, geography,
-              biology, level_pol, level_his, level_physics, level_chem, level_geo, level_bio, physical, comprehensive,
-              experiment, music_art, total, ID)
+        # # 获取信息
+        # chinese = stu.chinese
+        # math = stu.math
+        # english = stu.english
+        # physics = stu.physics
+        # chemistry = stu.chemistry
+        # political = stu.political
+        # history = stu.history
+        # geography = stu.geography
+        # biology = stu.biology
+        # level_pol = stu.level_pol
+        # level_his = stu.level_his
+        # level_physics = stu.level_physics
+        # level_chem = stu.level_chem
+        # level_geo = stu.level_geo
+        # level_bio = stu.level_bio
+        # physical = stu.physical
+        # comprehensive = stu.comprehensive
+        # experiment = stu.experiment
+        # music_art = stu.music_art
+        # total = stu.total
+        #
+        # # 测试
+        # print(i, chinese, math, english, physics, chemistry, political, history, geography,
+        #       biology, level_pol, level_his, level_physics, level_chem, level_geo, level_bio, physical, comprehensive,
+        #       experiment, music_art, total, idcard)
 
         # 更新信息到student表中
-        update_query = ("UPDATE grade SET chinese = %s, math = %s, english = %s,physics = %s, chemistry = %s, "
-                        "political = %s, history = %s, geography = %s,biology = %s, level_pol = %s, level_his = %s, "
-                        "level_physics = %s, level_chem = %s, level_geo = %s, level_bio = %s, physical = %s, "
-                        "comprehensive = %s, experiment = %s, music_art = %s, total = %s where idcard = %s")
-        update_values = (chinese, math, english, physics, chemistry, political, history, geography,
-                         biology, level_pol, level_his, level_physics, level_chem, level_geo, level_bio, physical,
-                         comprehensive, experiment, music_art, total, ID)
-        cursor.execute(update_query, update_values)
+
+        # update_query = ("UPDATE grade SET chinese = %s, math = %s, english = %s,physics = %s, chemistry = %s, "
+        #                 "political = %s, history = %s, geography = %s,biology = %s, level_pol = %s, level_his = %s, "
+        #                 "level_physics = %s, level_chem = %s, level_geo = %s, level_bio = %s, physical = %s, "
+        #                 "comprehensive = %s, experiment = %s, music_art = %s, total = %s where idcard = %s")
+        # update_values = (chinese, math, english, physics, chemistry, political, history, geography,
+        #                  biology, level_pol, level_his, level_physics, level_chem, level_geo, level_bio, physical,
+        #                  comprehensive, experiment, music_art, total, ID)
+        # cursor.execute(update_query, update_values)
+
         # 提交事务
-        conn.commit()
 
 
 if __name__ == '__main__':
     # 链接数据库
-    connection = SaveInfo.Connection()
+    sql = SQLite_Tool.SQL()
     # 处理数据
-    deal_data(connection.conn)
+    deal_data()
     # 关闭数据库
-    connection.close_mysql()
+    sql.close_connection()
