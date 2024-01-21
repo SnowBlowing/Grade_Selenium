@@ -35,3 +35,4 @@ class Student:
         # self.computer = computer
         self.music_art = music_art
         self.total = total
+
