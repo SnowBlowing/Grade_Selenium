@@ -6,12 +6,14 @@
 # @Describe: 中考成绩爬虫
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.edge.service import Service
 from selenium.webdriver.support.ui import Select
 import time
-import pymysql
 import Student
 import SaveInfo
+import configparser
+
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 
 # 爬取信息
@@ -31,9 +33,9 @@ def get_info_web(garde_id, ID, name):
     # browser = webdriver.Edge(options=option, service=service)
     # browser.get('http://218.26.234.85/views/search.html')
 
-    service = Service('E:\\Environment\\Browser\\Edge\\MicrosoftWebDriver.exe')
-    browser = webdriver.Edge(service=service)
-    browser.get('http://218.26.234.85/views/search.html')
+    browser = webdriver.Edge()
+    website = config.get('web', 'site')
+    browser.get(website)
     time.sleep(1)
 
     # 找到下拉框
@@ -70,14 +72,6 @@ def get_info_web(garde_id, ID, name):
     time.sleep(1)
     return stu
 
-def fun():
-    # 链接数据库
-    connection = SaveInfo.Connection
-    # 处理数据
-    deal_data(connection.conn)
-    # 关闭数据库
-    connection.close_mysql()
-
 
 # 处理数据
 def deal_data(conn):
@@ -90,7 +84,7 @@ def deal_data(conn):
 # 获取基本信息
 def get_stu(cursor, conn):
     # 获取student表中的信息
-    query = "SELECT * FROM student2"
+    query = "SELECT * FROM grade"
     cursor.execute(query)
 
     # 获取查询结果
@@ -135,7 +129,10 @@ def get_stu(cursor, conn):
               experiment, music_art, total, ID)
 
         # 更新信息到student表中
-        update_query = "UPDATE student2 SET chinese = %s, math = %s, english = %s,physics = %s, chemistry = %s, political = %s, history = %s, geography = %s,biology = %s, level_pol = %s, level_his = %s, level_physics = %s, level_chem = %s, level_geo = %s, level_bio = %s, physical = %s, comprehensive = %s, experiment = %s, music_art = %s, total = %s where idcard = %s"
+        update_query = ("UPDATE grade SET chinese = %s, math = %s, english = %s,physics = %s, chemistry = %s, "
+                        "political = %s, history = %s, geography = %s,biology = %s, level_pol = %s, level_his = %s, "
+                        "level_physics = %s, level_chem = %s, level_geo = %s, level_bio = %s, physical = %s, "
+                        "comprehensive = %s, experiment = %s, music_art = %s, total = %s where idcard = %s")
         update_values = (chinese, math, english, physics, chemistry, political, history, geography,
                          biology, level_pol, level_his, level_physics, level_chem, level_geo, level_bio, physical,
                          comprehensive, experiment, music_art, total, ID)
@@ -145,4 +142,9 @@ def get_stu(cursor, conn):
 
 
 if __name__ == '__main__':
-    connect_mysql()
+    # 链接数据库
+    connection = SaveInfo.Connection()
+    # 处理数据
+    deal_data(connection.conn)
+    # 关闭数据库
+    connection.close_mysql()

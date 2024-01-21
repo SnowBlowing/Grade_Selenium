@@ -6,14 +6,18 @@
 # @Describe: 持久化存储
 # -*- encoding:utf-8 -*-
 import pymysql
+import configparser
+
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 
 class Connection:
     conn = None
-    db_host = 'localhost'
-    db_user = 'root'
-    db_psw = '141421'
-    db_name = 'grade_selenium'
+    db_host = config.get('database', 'host')
+    db_user = config.get('database', 'user')
+    db_psw = config.get('database', 'password')
+    db_name = config.get('database', 'database')
 
     def __init__(self):
         try:
