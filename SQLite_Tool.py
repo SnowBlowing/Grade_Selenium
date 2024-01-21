@@ -94,28 +94,6 @@ class SQL:
         # 获取查询结果
         self.results = self.cursor.fetchall()
 
-        # 遍历每一行并拆分数据
-        # chinese = row[0]
-        # math = row[1]
-        # english = row[2]
-        # physics = row[3]
-        # chemistry = row[4]
-        # political = row[5]
-        # history = row[6]
-        # geography = row[7]
-        # biology = row[8]
-        # level_pol = row[9]
-        # level_his = row[10]
-        # level_physics = row[11]
-        # level_chem = row[12]
-        # level_geo = row[13]
-        # level_bio = row[14]
-        # physical = row[15]
-        # comprehensive = row[16]
-        # experiment = row[17]
-        # music_art = row[18]
-        # total = row[19]
-
     # 关闭连接
     def close_connection(self):
         self.conn.close()
