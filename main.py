@@ -10,12 +10,12 @@ from selenium.webdriver.support.ui import Select
 import time
 import configparser
 
-import Student
-import SQLite_Tool
+from entity import Student
+from utility import SQLite_Tool
 
 config = configparser.ConfigParser()
-config.read('config.ini')
-
+config.read('config/config.ini')
+print(config['web']['site'])
 
 # 爬取信息
 def get_info_web(garde_id, ID, name):

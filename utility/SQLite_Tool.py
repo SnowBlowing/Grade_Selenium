@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time    : 224/1/21  16:5
+# @Time    : 2024/1/21  16:5
 # @Author  : 菠萝吹雪
 # @Software: PyCharm
 # @Describe: 
@@ -10,19 +10,13 @@ import pandas as pd
 import configparser
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('config/config.ini')
 path = config.get('excel', 'path')
-
-# 读取 Excel 文件，仅选择 'name' 、 'exam_id' 和 'idcard' 列的数据
-excel_data = pd.read_excel(path, usecols=['name', 'exam_id', 'idcard'])
-
-# 显示 DataFrame 中的数据
-print(excel_data)
 
 
 class SQL:
     def __init__(self):
-        self.conn = sqlite3.connect('student_grade.db')  # 链接数据库
+        self.conn = sqlite3.connect('../database/student_grade.db')  # 链接数据库
         self.cursor = None  # 游标对象
         self.results = None  # 查询结果
         self.cursor = self.conn.cursor()  # 创建游标对象
@@ -62,6 +56,9 @@ class SQL:
         )
 
     def readExcel(self):
+        # 读取 Excel 文件，仅选择 'name' 、 'exam_id' 和 'idcard' 列的数据
+        excel_data = pd.read_excel(path, usecols=['name', 'exam_id', 'idcard'])
+
         # 读取已存在的 grade 表的数据
         existing_data = pd.read_sql_query('SELECT * FROM grade', self.conn)
 
