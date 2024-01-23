@@ -16,7 +16,7 @@ path = config.get('excel', 'path')
 
 class SQL:
     def __init__(self):
-        self.conn = sqlite3.connect('../database/student_grade.db')  # 链接数据库
+        self.conn = sqlite3.connect('database/student_grade.db')  # 链接数据库
         self.cursor = None  # 游标对象
         self.results = None  # 查询结果
         self.cursor = self.conn.cursor()  # 创建游标对象

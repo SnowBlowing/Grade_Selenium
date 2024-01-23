@@ -20,20 +20,9 @@ class Windows(QWidget):
         self.widget_list()
 
     def widget_list(self):
-        self.add_widget()
         self.add_widget_file()
 
     # 添加控件
-    def add_widget(self):
-        # 运行
-        widget_run = RunScraper(self)
-        total_time = 5
-        widget_run.runs(total_time)
-
-        # 网址
-        widget_website = WidgetNonEvent(self)
-
-    # 添加文件相关控件
     def add_widget_file(self):
         caption = '请选择一个文件'
         directory = './'
@@ -47,6 +36,14 @@ class Windows(QWidget):
         # 保存到Excel文件
         widget_save = SaveFile(self)
         widget_save.save_files('保存', caption, directory, file_filter, initial_filter)
+
+        # 网址
+        widget_website = WidgetNonEvent(self)
+
+        # 运行
+        widget_run = RunScraper(self, widget_select, widget_website)
+        total_time = 5
+        widget_run.runs(total_time)
 
 
 if __name__ == '__main__':

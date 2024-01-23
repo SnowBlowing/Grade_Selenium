@@ -6,8 +6,9 @@
 # @Describe: 
 # -*- encoding:utf-8 -*-
 from PyQt5.Qt import *
-
+import sys
 from ui.ProcessDialog import ProcessDialog
+from utility import Config_Tool
 
 
 # 无事件控件
@@ -30,7 +31,7 @@ class WidgetNonEvent(QWidget):
 
 # 运行成绩爬虫
 class RunScraper(QWidget):
-    def __init__(self, parent):
+    def __init__(self, parent, widget_select, widget_website):
         super().__init__(parent)
         self.move(650, 220)
         self.resize(130, 50)
@@ -39,10 +40,19 @@ class RunScraper(QWidget):
         self.btn.resize(120, 30)
         self.btn.move(self.width() - self.btn.width(), 10)
 
+        self.widget_select = widget_select
+        self.widget_website = widget_website
+
     def runs(self, total_time):
         self.btn.setText('运行')
 
         def run():
+            print(1)
+            # 修改配置文件
+            new_file_path = self.widget_select.led.text()
+            new_web_site = self.widget_website.led.text()
+            Config_Tool.modify_ini_file(new_file_path, new_web_site)
+
             # 运行爬虫
             print('运行爬虫')
 
@@ -52,3 +62,11 @@ class RunScraper(QWidget):
             process_dialog.exec_()
 
         self.btn.clicked.connect(run)
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    process_dialog = ProcessDialog(5)
+
+    process_dialog.show()
+    sys.exit(app.exec_())
