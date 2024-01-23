@@ -11,7 +11,6 @@ import sys
 from ui.Widget import RunScraper, WidgetNonEvent
 from ui.WidgetFile import SelectFile, SaveFile
 
-
 class Windows(QWidget):
     def __init__(self):
         super().__init__()
@@ -42,13 +41,11 @@ class Windows(QWidget):
 
         # 运行
         widget_run = RunScraper(self, widget_select, widget_website)
-        total_time = 5
-        widget_run.runs(total_time)
+        widget_run.runs()
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = Windows()
-
     window.show()
     sys.exit(app.exec_())

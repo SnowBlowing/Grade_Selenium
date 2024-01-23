@@ -5,10 +5,18 @@
 # @Software: PyCharm
 # @Describe: 
 # -*- encoding:utf-8 -*-
+import time
+
 from PyQt5.Qt import *
 import sys
+import configparser
+
+from WebScraper import WebScraper
 from ui.ProcessDialog import ProcessDialog
-from utility import Config_Tool
+from utility import Config_Tool, SQLite_Tool
+
+config = configparser.ConfigParser()
+config.read('../config/config.ini')
 
 
 # 无事件控件
@@ -43,25 +51,48 @@ class RunScraper(QWidget):
         self.widget_select = widget_select
         self.widget_website = widget_website
 
-    def runs(self, total_time):
+    def runs(self):
         self.btn.setText('运行')
 
         def run():
-            print(1)
             # 修改配置文件
             new_file_path = self.widget_select.led.text()
             new_web_site = self.widget_website.led.text()
             Config_Tool.modify_ini_file(new_file_path, new_web_site)
 
             # 运行爬虫
-            print('运行爬虫')
+            web_scraper = WebScraper()
+
+            # 处理数据
+            print('处理数据')
+            # 获取数据总数
+            web_scraper.sql.get_info_num()
+            info_num = web_scraper.sql.info_num
+            # 计算时间
+            per_time = config.get('scraper', 'time')
+            total_time = 5 * int(per_time)  # test为5，实际修改为info_num
 
             # 打开进度对话框
-            process_dialog = ProcessDialog(total_time)
-            process_dialog.show()
-            process_dialog.exec_()
+            my_process_dialog = ProcessDialog(total_time)
+            my_process_dialog.show()
+            my_process_dialog.exec_()
+
+            # 运行爬虫程序 应该是线程？否则进度结束才会继续
+            self.deal()
+            # web_scraper.deal_data()
+
+            # 关闭数据库
+            web_scraper.sql.close_connection()
 
         self.btn.clicked.connect(run)
+
+    # 模拟爬虫
+    def deal(self):
+        count = 0
+        while count < 3:
+            count += 1
+            time.sleep(1)
+            print(count)
 
 
 if __name__ == '__main__':

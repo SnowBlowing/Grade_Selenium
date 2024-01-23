@@ -10,18 +10,20 @@ import pandas as pd
 import configparser
 
 config = configparser.ConfigParser()
-config.read('config/config.ini')
+config.read('../config/config.ini')
 path = config.get('excel', 'path')
 
 
 class SQL:
     def __init__(self):
-        self.conn = sqlite3.connect('database/student_grade.db')  # 链接数据库
+        self.conn = sqlite3.connect('../database/student_grade.db')  # 链接数据库
         self.cursor = None  # 游标对象
         self.results = None  # 查询结果
         self.cursor = self.conn.cursor()  # 创建游标对象
         self.create_table()  # 创建grade表
         self.readExcel()
+
+        self.info_num = 0
 
     # 创建表
     def create_table(self):
@@ -122,6 +124,12 @@ class SQL:
         self.cursor.execute('SELECT * FROM grade')
         # 获取查询结果
         self.results = self.cursor.fetchall()
+
+    # 获取数据总数
+    def get_info_num(self):
+        self.select_grade()
+        for row in self.results:
+            self.info_num += 1
 
     # 关闭连接
     def close_connection(self):

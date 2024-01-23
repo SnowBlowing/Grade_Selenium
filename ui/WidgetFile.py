@@ -21,6 +21,7 @@ class SelectFile(QWidget):
         self.led = QLineEdit(self)
         self.led.move(100, 10)
         self.led.resize(self.width() - self.btn.width() - self.led.width(), 30)
+        self.led.setText("C:/Users/23583/Desktop/grade/1_student2.xls")
 
         self.label = QLabel(self)
         self.label.resize(100, 30)

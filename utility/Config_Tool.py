@@ -18,11 +18,9 @@ def modify_ini_file(new_file_path, new_web_site):
     config.read(inifile_path)
 
     # 修改值
-    config.set('web', 'excel', new_file_path)
-    config.set('web', 'web_site', new_web_site)
+    config.set('web', 'site', new_web_site)
+    config.set('excel', 'path', new_file_path)
 
     # 写入修改后的内容到文件
-    with open(inifile_path, 'w') as config_file:
+    with open(inifile_path, 'w', encoding='utf-8') as config_file:
         config.write(config_file)
-
-
