@@ -1,7 +1,10 @@
 # 成绩爬虫
 ## 项目介绍
 本项目是一个基于selenium和PyQt5的爬虫程序，用于爬取山西省中考的学生成绩信息，并保存到数据库中。
-
+### 前端展示
+![img1.png](img%2Fimg1.png)
+![img2.png](img%2Fimg2.png)
+![img2.png](img%2Fimg3.png)
 ## 已实现内容
 * 使用轻量型数据库SQLite
 * 实现直接读取excel文件数据到SQLite数据库
@@ -16,7 +19,6 @@
     * 关于：版权，联系方式
 * 导出到excel
 
-## 当前急需实现逻辑
 
 ## 待优化问题
 
