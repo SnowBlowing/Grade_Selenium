@@ -10,9 +10,11 @@ import pandas as pd
 import configparser
 
 config = configparser.ConfigParser()
-config.read('../config/config.ini')
+config.read('../config/config.ini', encoding='utf-8')
 path = config.get('excel', 'path')
 
+
+# save_path = config.get('excel', 'save_path')
 
 class SQL:
     def __init__(self):
@@ -57,6 +59,7 @@ class SQL:
             '''
         )
 
+    # 从Excel文件读取数据
     def readExcel(self):
         # 读取 Excel 文件，仅选择 'name' 、 'exam_id' 和 'idcard' 列的数据
         excel_data = pd.read_excel(path, usecols=['name', 'exam_id', 'idcard'])
@@ -78,6 +81,18 @@ class SQL:
         # 将合并后的数据写入数据库的 grade 表中
         merged_data.to_sql('grade', self.conn, index=False, if_exists='replace', schema='main', method='multi',
                            chunksize=500)
+
+    # 写数据到Excel文件
+    def writeExcel(self, save_path):
+        # 使用 SQL 查询获取数据
+        query = "SELECT * FROM grade"
+        df = pd.read_sql(query, self.conn)
+
+        # 将数据写入 Excel 文件
+        df.to_excel(save_path, index=False, engine='openpyxl')
+
+        # 关闭数据库连接
+        self.conn.close()
 
     def insert_grade(self, student):
         # 插入数据

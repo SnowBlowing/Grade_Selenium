@@ -6,12 +6,16 @@
 # @Describe: 
 # -*- encoding:utf-8 -*-
 from PyQt5.Qt import *
+import os
+
+from utility.SQLite_Tool import SQL
+
 
 # 选择Excel文件
 class SelectFile(QWidget):
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent)
-        self.move(80, 30)
+        self.move(80, 40)
         self.resize(700, 80)
 
         self.btn = QPushButton(self)
@@ -21,7 +25,7 @@ class SelectFile(QWidget):
         self.led = QLineEdit(self)
         self.led.move(100, 10)
         self.led.resize(self.width() - self.btn.width() - self.led.width(), 30)
-        self.led.setText("C:/Users/23583/Desktop/grade/1_student2.xls")
+        self.led.setText("C:/Users/23583/Desktop/grade/student1.xls")
 
         self.label = QLabel(self)
         self.label.resize(100, 30)
@@ -47,12 +51,13 @@ class SelectFile(QWidget):
 class SaveFile(QWidget):
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent)
-        self.move(80, 130)
+        self.move(80, 140)
         self.resize(700, 80)
 
         self.btn = QPushButton(self)
         self.btn.resize(120, 30)
         self.btn.move(self.width() - self.btn.width(), 10)
+        self.btn.setEnabled(False)
 
         self.led = QLineEdit(self)
         self.led.move(100, 10)
@@ -74,5 +79,23 @@ class SaveFile(QWidget):
             initial_filter = args[4]
             file = QFileDialog.getSaveFileName(self, caption, directory, file_filter, initial_filter)
             self.led.setText(file[0])
+
+            # ini写入file【0】 暂不实现，价值不大
+            save_path = file[0]
+            if save_path:
+                # 获取目录路径
+                directory_path = os.path.dirname(save_path)
+
+                # 检查目录是否存在，如果不存在则创建
+                if not os.path.exists(directory_path):
+                    os.makedirs(directory_path)
+
+                # 在目标路径创建文件
+                with open(save_path, 'w'):
+                    pass  # 在此处添加文件的具体内容
+                    sql = SQL()
+                    sql.writeExcel(save_path)
+                    suc_msg = QMessageBox(QMessageBox.Information, '提示', '保存成功！')
+                    suc_msg.exec_()
 
         self.btn.clicked.connect(select_file)

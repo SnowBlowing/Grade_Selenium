@@ -8,8 +8,9 @@
 from PyQt5.Qt import *
 import sys
 
-from ui.Widget import RunScraper, WidgetNonEvent
+from ui.Widget import RunScraper, WidgetNonEvent, MenuBar
 from ui.WidgetFile import SelectFile, SaveFile
+
 
 class Windows(QWidget):
     def __init__(self):
@@ -19,14 +20,17 @@ class Windows(QWidget):
         self.widget_list()
 
     def widget_list(self):
-        self.add_widget_file()
+        self.add_widget()
 
     # 添加控件
-    def add_widget_file(self):
+    def add_widget(self):
         caption = '请选择一个文件'
         directory = './'
-        file_filter = '所有文件(*.*);;Excel文件(*.xls *.xlsx)'
+        file_filter = 'Excel文件(*.xlsx *.xls);;所有文件(*.*)'
         initial_filter = 'Excel文件(*.xls *.xlsx)'
+
+        # 菜单栏
+        menu = MenuBar(self)
 
         # 选择Excel文件
         widget_select = SelectFile(self)
@@ -40,7 +44,7 @@ class Windows(QWidget):
         widget_website = WidgetNonEvent(self)
 
         # 运行
-        widget_run = RunScraper(self, widget_select, widget_website)
+        widget_run = RunScraper(self, widget_select, widget_website, widget_save)
         widget_run.runs()
 
 

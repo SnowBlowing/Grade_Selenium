@@ -15,7 +15,7 @@ def modify_ini_file(new_file_path, new_web_site):
     config = configparser.ConfigParser()
 
     # 读取 INI 文件
-    config.read(inifile_path)
+    config.read(inifile_path, encoding='utf-8')
 
     # 修改值
     config.set('web', 'site', new_web_site)
